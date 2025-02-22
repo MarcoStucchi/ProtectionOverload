@@ -1,3 +1,3 @@
 ﻿# Documentation
 
-This project is aimed an introducing **Test Automation** in an embedded protecction. 
+This project is aimed an introducing **Test Automation** in an embedded protection. 
