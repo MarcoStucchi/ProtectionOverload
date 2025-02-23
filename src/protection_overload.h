@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 // State Machine States
 typedef enum {
@@ -21,9 +22,10 @@ typedef struct {
 
 // State Machine parameters
 typedef struct {
-    ProtectionOverloadState state;
-    ProtectionOverloadParams params;
-    float accumulated_energy;
+    ProtectionOverloadState state;      // Current state
+    bool entry;                         // State entry flag
+    ProtectionOverloadParams params;    // Operating parameters
+    float accumulated_energy;           // Energy accumulator
 } ProtectionOverloadSM;
 
 // API Functions

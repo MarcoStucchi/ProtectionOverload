@@ -15,6 +15,14 @@ const char* ProtectionOverloadStateDescription[] = {
 // State machine instance
 static ProtectionOverloadSM sm;
 
+// Entry a new state
+void ProtectionOverload_SM_EnterState(ProtectionOverloadState state) {  
+    // Set new state and entry flag
+    sm.state = state;
+    sm.entry = true;
+}
+
+// State Machine Initialization
 void ProtectionOverload_SM_Init(ProtectionOverloadParams *params) {
 
     // Init SM state
@@ -43,6 +51,12 @@ void ProtectionOverload_SM_Run() {
     switch (sm.state) {
 
         case ST_IDLE: {
+            
+            // Entry function
+            if (sm.entry) {
+                // Reset entry flag
+                sm.entry = false;
+            }
 
             // Read current sensor value
             float maxCurrent = Sensor_Read();
@@ -59,7 +73,8 @@ void ProtectionOverload_SM_Run() {
 
                 // Check if accumulated energy exceeds 1.0 (tripping threshold)
                 if (sm.accumulated_energy >= 1.0f) {
-                    sm.state = ST_OVERLOAD_TRIGGERED;
+                    // Trip protection
+                    ProtectionOverload_SM_EnterState(ST_OVERLOAD_TRIGGERED);
                 }
             } else {
                 // If current drops below threshold, slowly reset energy (hysteresis)
@@ -70,6 +85,13 @@ void ProtectionOverload_SM_Run() {
         }
         
         case ST_OVERLOAD_TRIGGERED:
+
+            // Entry function
+            if (sm.entry) {
+                // Reset entry flag
+                sm.entry = false;
+            }
+    
             // Once triggered, remain in this state until reset (not implemented here)
             break;
     }
