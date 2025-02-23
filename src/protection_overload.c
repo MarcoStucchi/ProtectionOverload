@@ -16,7 +16,7 @@ const char* ProtectionOverloadStateDescription[] = {
 static ProtectionOverloadSM sm;
 
 // Entry a new state
-void ProtectionOverload_SM_EnterState(ProtectionOverloadState state) {  
+static void ProtectionOverload_SM_EnterState(ProtectionOverloadState state) {  
     // Set new state and entry flag
     sm.state = state;
     sm.entry = true;
@@ -24,7 +24,6 @@ void ProtectionOverload_SM_EnterState(ProtectionOverloadState state) {
 
 // State Machine Initialization
 void ProtectionOverload_SM_Init(ProtectionOverloadParams *params) {
-
     // Init SM state
     ProtectionOverload_SM_EnterState(ST_IDLE);
 
@@ -37,13 +36,11 @@ void ProtectionOverload_SM_Init(ProtectionOverloadParams *params) {
 
 // Return protection call rate [s]
 float ProtectionOverload_SM_GetCallRate(void) {
-
     return CALL_RATE;
 }
 
 // Run state machine (called periodically)
 void ProtectionOverload_SM_Run() {
-
     // Get time step in seconds
     float call_rate_sec = ProtectionOverload_SM_GetCallRate();  
 
@@ -51,7 +48,6 @@ void ProtectionOverload_SM_Run() {
     switch (sm.state) {
 
         case ST_IDLE: {
-            
             // Entry function
             if (sm.entry) {
                 // Reset entry flag

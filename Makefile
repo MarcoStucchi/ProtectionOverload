@@ -6,10 +6,12 @@ CC_WIN = gcc
 SRC_DIR = src
 BUILD_DIR = build
 TESTS_DIR = tests
+UNITY_DIR = lib/unity
 
 # Files
 SRCS = $(SRC_DIR)/protection_overload.c
 TEST_SRCS = $(TESTS_DIR)/test_protection_overload.c
+UNITY_SRC = $(UNITY_DIR)/unity.c
 STUBS = $(TESTS_DIR)/stubs.c  # Stubs required for ARM build only
 
 # Output Executables
@@ -48,9 +50,9 @@ clean:
 	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.elf $(BUILD_DIR)/*.exe
 
 # ARM Build
-$(OUT_ARM): $(SRCS) $(TEST_SRCS) $(STUBS)
-	$(CC_ARM) $(CFLAGS) -o $@ $^ $(LDFLAGS_ARM)
+$(OUT_ARM): $(SRCS) $(TEST_SRCS) $(STUBS) $(UNITY_SRC)
+	$(CC_ARM) $(CFLAGS) -I $(UNITY_DIR) -o $@ $^ $(LDFLAGS_ARM)
 
 # Windows Build (excluding stubs)
-$(OUT_WIN): $(SRCS) $(TEST_SRCS)
-	$(CC_WIN) $(CFLAGS) -o $@ $^ $(LDFLAGS_WIN)
+$(OUT_WIN): $(SRCS) $(TEST_SRCS) $(UNITY_SRC)
+	$(CC_WIN) $(CFLAGS) -I $(UNITY_DIR) -o $@ $^ $(LDFLAGS_WIN)
