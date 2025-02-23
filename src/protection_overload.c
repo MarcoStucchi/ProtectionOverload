@@ -44,8 +44,8 @@ void ProtectionOverload_SM_Run() {
             float overload_factor = maxCurrent / sm.params.overload_threshold;
 
             if (overload_factor > 1.05f) {
-                // Compute inverse-time trip curve: t_trip = k / (I/I_trip)^n
-                float trip_time_sec = sm.params.k_factor / powf(overload_factor, sm.params.cooling_rate);
+                // Compute inverse-time trip curve: t_trip = k / ((I/I_trip)^n - 1)
+                float trip_time_sec = sm.params.k_factor / (powf(overload_factor, 2)-1);
 
                 // Accumulate energy based on time step
                 sm.accumulated_energy += (call_rate_sec / trip_time_sec);
