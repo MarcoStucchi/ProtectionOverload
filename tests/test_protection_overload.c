@@ -19,8 +19,8 @@ float Sensor_Read() {
 void test_ProtectionOverload_Generic(
     ProtectionOverloadParams *params,
     float simulated_current,    
-    float expected_time, 
-    ProtectionOverloadState expected_state) {
+    ProtectionOverloadState expected_state,
+    float expected_time) {
 
     // Init state machine and parameters
     ProtectionOverload_SM_Init(params);
@@ -74,13 +74,15 @@ int main() {
 
     ProtectionOverloadParams protectionParams = {
         .overload_threshold = 1.0f,     // Normalized to 1.0 (current passed in the test is actually I/Ithreshold)
-        .k_factor = 1.0f,
-        .cooling_rate = 0.98f,
-        .max_energy = 1.0f
+        .k_factor = 1.0f,               // IEC 60947 protection k
+        .cooling_rate = 0.98f,          
+        .max_energy = 1.0f              // 1.0 is the trip threshold
     };
 
-    test_ProtectionOverload_Generic(&protectionParams, 1.2f, 2.27f, ST_OVERLOAD_TRIGGERED);
-    test_ProtectionOverload_Generic(&protectionParams, 1.4f, 1.04f, ST_OVERLOAD_TRIGGERED);
-    test_ProtectionOverload_Generic(&protectionParams, 0.2f,  0.0f, ST_IDLE);
+    // Test cases
+    test_ProtectionOverload_Generic(&protectionParams, 1.0f, ST_IDLE, 0.0f);
+    test_ProtectionOverload_Generic(&protectionParams, 1.2f, ST_OVERLOAD_TRIGGERED, 2.27f);
+    test_ProtectionOverload_Generic(&protectionParams, 1.4f, ST_OVERLOAD_TRIGGERED, 1.04f);
+    test_ProtectionOverload_Generic(&protectionParams, 0.2f, ST_IDLE, 0.0f);
     return 0;
 }
