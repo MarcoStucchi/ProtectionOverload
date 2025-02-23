@@ -26,7 +26,7 @@ void ProtectionOverload_SM_EnterState(ProtectionOverloadState state) {
 void ProtectionOverload_SM_Init(ProtectionOverloadParams *params) {
 
     // Init SM state
-    sm.state = ST_IDLE;
+    ProtectionOverload_SM_EnterState(ST_IDLE);
 
     // Clear energy storage
     sm.accumulated_energy = 0.0f;
