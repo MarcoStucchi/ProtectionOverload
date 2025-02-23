@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define protectionTolerance 0.1f        // 10% tolerance for protection trip time (used in tests)
+
 // State Machine States
 typedef enum {
     ST_IDLE,                            // Protection active and running

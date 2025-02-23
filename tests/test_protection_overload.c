@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "protection_overload.h"
 
-#define CALL_RATE_MS 10
+#define TEST_MAX_TIME   3600.0  // [s] max time for test execution (default = 1 hour)
 
 float mock_sensor_values[] = {3.0, 3.0, 3.0, 3.0, 3.0};
 int mock_index = 0;
@@ -19,13 +19,17 @@ float Sensor_Read() {
 void test_ProtectionOverload_Generic(
     ProtectionOverloadParams *params,
     float simulated_current,    
-    float expected_time,
-    float tolerance, 
-    ProtectionOverloadState expected_state,
-    float max_test_time) {
+    float expected_time, 
+    ProtectionOverloadState expected_state) {
 
     // Init state machine and parameters
     ProtectionOverload_SM_Init(params);
+
+    // Max test time
+    float max_test_time = TEST_MAX_TIME;
+    if (max_test_time < 2*expected_time) {
+        max_test_time = 2*expected_time;
+    }
 
     // Set test current value
     test_current = simulated_current;
@@ -49,15 +53,15 @@ void test_ProtectionOverload_Generic(
 
     // Calculate SM timings and expected time range
     float actual_time = iterations * ProtectionOverload_SM_GetCallRate();
-    float lower_bound = expected_time * (1.0 - tolerance / 100.0);
-    float upper_bound = expected_time * (1.0 + tolerance / 100.0);
+    float lower_bound = expected_time * (1.0 - protectionTolerance);
+    float upper_bound = expected_time * (1.0 + protectionTolerance);
 
     printf("exit state = %s, expected state = %s \n", ProtectionOverload_SM_GetStateDescriptor(ProtectionOverload_SM_GetState()), ProtectionOverload_SM_GetStateDescriptor(expected_state));
 
     // Check the expected state is verified
     assert(ProtectionOverload_SM_GetState() == expected_state);
 
-    printf("actual time = %.2f s, expected time = %.2f s +/- %2.0f%%\n", actual_time, expected_time, tolerance);
+    printf("actual time = %.2f s, expected time = %.2f s +/- %2.0f%%\n", actual_time, expected_time, 100.0f*protectionTolerance);
 
     // In case of trigger: check expected timing
     if (expected_state == ST_OVERLOAD_TRIGGERED) {
@@ -69,14 +73,14 @@ void test_ProtectionOverload_Generic(
 int main() {
 
     ProtectionOverloadParams protectionParams = {
-        .overload_threshold = 1.0f,
+        .overload_threshold = 1.0f,     // Normalized to 1.0 (current passed in the test is actually I/Ithreshold)
         .k_factor = 1.0f,
         .cooling_rate = 0.98f,
         .max_energy = 1.0f
     };
 
-    test_ProtectionOverload_Generic(&protectionParams, 1.2f, 2.27f, 10.0f, ST_OVERLOAD_TRIGGERED, 5000.0f);
-    test_ProtectionOverload_Generic(&protectionParams, 1.4f, 1.04f, 10.0f, ST_OVERLOAD_TRIGGERED, 5000.0f);
-    test_ProtectionOverload_Generic(&protectionParams, 0.2f,  0.0f, 10.0f, ST_IDLE, 5000.0f);
+    test_ProtectionOverload_Generic(&protectionParams, 1.2f, 2.27f, ST_OVERLOAD_TRIGGERED);
+    test_ProtectionOverload_Generic(&protectionParams, 1.4f, 1.04f, ST_OVERLOAD_TRIGGERED);
+    test_ProtectionOverload_Generic(&protectionParams, 0.2f,  0.0f, ST_IDLE);
     return 0;
 }
