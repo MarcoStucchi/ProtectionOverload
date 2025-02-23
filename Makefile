@@ -1,4 +1,4 @@
-# Compiler
+# Compiler for ARM and Windows
 CC_ARM = arm-none-eabi-gcc
 CC_WIN = gcc
 
@@ -9,39 +9,48 @@ TESTS_DIR = tests
 
 # Files
 SRCS = $(SRC_DIR)/protection_overload.c
-TEST_SRCS = $(TESTS_DIR)/test_protection_overload.c $(TESTS_DIR)/stubs.c
+TEST_SRCS = $(TESTS_DIR)/test_protection_overload.c
+STUBS = $(TESTS_DIR)/stubs.c  # Stubs required for ARM build only
+
+# Output Executables
+OUT_ARM = $(BUILD_DIR)/test_protection_overload_arm.elf
+OUT_WIN = $(BUILD_DIR)/test_protection_overload_win.exe
 
 # Compiler Flags
 CFLAGS = -I$(SRC_DIR) -Wall -Wextra -std=c11
 LDFLAGS_ARM = -lm --specs=nosys.specs
-LDFLAGS_WIN = -lm
+LDFLAGS_WIN = -lm  # No special specs needed for Windows
 
-# Executables
-ARM_EXE = $(BUILD_DIR)/test_protection_overload.elf
-WIN_EXE = $(BUILD_DIR)/test_protection_overload.exe
+# Ensure build directory exists
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
-# Build ARM
-$(ARM_EXE): $(SRCS) $(TEST_SRCS)
-	$(CC_ARM) $(CFLAGS) -o $@ $^ $(LDFLAGS_ARM)
+# Build-only targets
+build_arm: $(BUILD_DIR) $(OUT_ARM)
 
-# Build Windows
-$(WIN_EXE): $(SRCS) $(TEST_SRCS)
-	$(CC_WIN) $(CFLAGS) -o $@ $^ $(LDFLAGS_WIN)
+build_win: $(BUILD_DIR) $(OUT_WIN)
 
-# Default: Build both
-all: arm win
+# Test targets (build + run)
+test_arm: build_arm
+	$(OUT_ARM)
 
-arm: $(ARM_EXE)
-win: $(WIN_EXE)
+test_win: build_win
+	$(OUT_WIN)
 
-# Run Windows test
-test: win
-	$(WIN_EXE)
+# Build both versions (ARM & Windows)
+build_all: build_arm build_win
 
-# Clean
+# Build & run both
+test_all: test_arm test_win
+
+# Clean build directory
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.elf $(BUILD_DIR)/*.exe
 
+# ARM Build
+$(OUT_ARM): $(SRCS) $(TEST_SRCS) $(STUBS)
+	$(CC_ARM) $(CFLAGS) -o $@ $^ $(LDFLAGS_ARM)
 
-# Use this instruction to test on ARM with QEMU
-# qemu-arm -L /path/to/qemu/libs build/test_protection_overload.elf
+# Windows Build (excluding stubs)
+$(OUT_WIN): $(SRCS) $(TEST_SRCS)
+	$(CC_WIN) $(CFLAGS) -o $@ $^ $(LDFLAGS_WIN)
