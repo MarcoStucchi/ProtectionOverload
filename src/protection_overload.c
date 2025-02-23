@@ -5,13 +5,20 @@
 
 #define   CALL_RATE 0.01f       // Call rate [s] = 10 ms
 
+// State Machine States description
+const char* ProtectionOverloadStateDescription[] = { 
+
+    "Idle (not Tripped)", 
+    "Tripped" 
+};
+
 // State machine instance
 static ProtectionOverloadSM sm;
 
 void ProtectionOverload_SM_Init(ProtectionOverloadParams *params) {
 
     // Init SM state
-    sm.state = ST_RUNNING;
+    sm.state = ST_IDLE;
 
     // Clear energy storage
     sm.accumulated_energy = 0.0f;
@@ -35,10 +42,10 @@ void ProtectionOverload_SM_Run() {
     // Protection State Machine
     switch (sm.state) {
 
-        case ST_RUNNING: {
+        case ST_IDLE: {
 
             // Read current sensor value
-            float maxCurrent = Sensor_Read();  
+            float maxCurrent = Sensor_Read();
 
             // Compute overload factor: I / I_trip
             float overload_factor = maxCurrent / sm.params.overload_threshold;
@@ -72,3 +79,16 @@ void ProtectionOverload_SM_Run() {
 ProtectionOverloadState ProtectionOverload_SM_GetState() {
     return sm.state;
 }
+
+/* Returns state machine state description of the passed state */
+const char* ProtectionOverload_SM_GetStateDescriptor(ProtectionOverloadState state) {
+
+    // Check for array congruence
+    if (state < sizeof(ProtectionOverloadStateDescription)/sizeof(char*))
+    {
+        return ProtectionOverloadStateDescription[state];
+    }
+    else 
+        return "Unknown State";
+}
+    

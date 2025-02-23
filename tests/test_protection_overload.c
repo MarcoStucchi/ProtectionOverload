@@ -42,6 +42,8 @@ void test_ProtectionOverload_Generic(
     float lower_bound = expected_time * (1.0 - tolerance / 100.0);
     float upper_bound = expected_time * (1.0 + tolerance / 100.0);
 
+    printf("exit state = %s, expected state = %s \n", ProtectionOverload_SM_GetStateDescriptor(ProtectionOverload_SM_GetState()), ProtectionOverload_SM_GetStateDescriptor(expected_state));
+
     // Check the expected state is verified
     assert(ProtectionOverload_SM_GetState() == expected_state);
 
