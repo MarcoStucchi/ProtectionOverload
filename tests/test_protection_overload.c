@@ -17,7 +17,6 @@ float test_current = 0.0f;
 /* ------------------------------------------------ 
         Unity setup and teardown functions
    ------------------------------------------------ */
-#ifdef USE_UNITY
 
 void setUp(void) { 
     // Called before every test
@@ -26,8 +25,6 @@ void setUp(void) {
 void tearDown(void) { 
     // Called after every test
 }
-
-#endif  // USE_UNITY
 
 /* ------------------------------------------------ 
         Mocked Sensor Read Function
@@ -43,7 +40,6 @@ float Sensor_Read() {
    ------------------------------------------------ */
 
 void test_ProtectionOverload_Generic(
-    unsigned int test_id,
     ProtectionOverloadParams *params,
     float simulated_current,    
     ProtectionOverloadState expected_state,
@@ -76,110 +72,82 @@ void test_ProtectionOverload_Generic(
         iterations++;
     }
 
-    // printf("exit state = %s, expected state = %s \n", ProtectionOverload_SM_GetStateDescriptor(ProtectionOverload_SM_GetState()), ProtectionOverload_SM_GetStateDescriptor(expected_state));
-
-#ifdef USE_UNITY
-    // Prepare test message
-    char test_message[100];
-    sprintf(test_message, "Test case failed: %d - Unexpected protection state %s", test_id, ProtectionOverload_SM_GetStateDescriptor(expected_state));
     // Check expected state using Unity
-    TEST_ASSERT_EQUAL_MESSAGE(expected_state, ProtectionOverload_SM_GetState(), test_message);
-#else
-    // Check the expected state is verified
-    assert(ProtectionOverload_SM_GetState() == expected_state);
-#endif
+    TEST_ASSERT_EQUAL_MESSAGE(expected_state, ProtectionOverload_SM_GetState(), "Protection state mismatch.");
 
     // Get actual time
     float actual_time = iterations * ProtectionOverload_SM_GetCallRate();
 
-#ifdef USE_UNITY
     // Check expected timing using Unity, only in case of tripped protection
     if (expected_state == ST_OVERLOAD_TRIGGERED) {
-        TEST_ASSERT_FLOAT_WITHIN(expected_time * protectionTolerance, expected_time, actual_time);
+        TEST_ASSERT_FLOAT_WITHIN_MESSAGE(expected_time * protectionTolerance, expected_time, actual_time, "Protection time mismatch.");
     }
-#else
-    // Print actual and expected time
-    printf("actual time = %.2f s, expected time = %.2f s +/- %2.0f%%\n", actual_time, expected_time, 100.0f*protectionTolerance);
-
-    // Calculate SM timings and expected time range
-    float lower_bound = expected_time * (1.0 - protectionTolerance);
-    float upper_bound = expected_time * (1.0 + protectionTolerance);
-    
-    // Check the expected timing is verified
-    if (expected_state == ST_OVERLOAD_TRIGGERED) {
-        assert(actual_time >= lower_bound && actual_time <= upper_bound);
-    }
-    printf("Test Passed!\n");
-#endif
-
 }
 
 /* ------------------------------------------------ 
-        Test Cases
+        Test Cases - Fixed Current Values
    ------------------------------------------------ */
-void test_ProtectionOverload_Parameterized(void) {
-    struct {
-        unsigned int test_id;
-        float simulated_current;
-        ProtectionOverloadState expected_state;
-        float expected_time;
-        const char* description;
-    } test_cases[] = {
-        {1, 0.2f, ST_IDLE, 0.0f, "Low current"},
-        {2, 0.8f, ST_IDLE, 0.0f, "Normal current"},
-        {3, 1.0f, ST_IDLE, 0.0f, "Nominal current"},
-        {4, 1.2f, ST_IDLE, 2.27f, "Overload current 1,2 x Itrip"},
-        {5, 1.4f, ST_OVERLOAD_TRIGGERED, 1.04f, "Overload current 1,4 x Itrip"},
-        {6, 1.6f, ST_OVERLOAD_TRIGGERED, 0.64f, "Overload current 1,6 x Itrip"},
-        {7, 2.0f, ST_OVERLOAD_TRIGGERED, 0.33f, "Overload current 2,0 x Itrip"},
-        {8, 3.0f, ST_OVERLOAD_TRIGGERED, 0.12f, "Overload current 3,0 x Itrip"}
-    };
 
-    // Protection parameters
-    ProtectionOverloadParams protectionParams = {
-        .overload_threshold = 1.0f,     // Normalized to 1.0 (current passed in the test is actually I/Ithreshold)
-        .k_factor = 1.0f,               // IEC 60947 protection k
-        .cooling_rate = 0.98f,          
-        .max_energy = 1.0f              // 1.0 is the trip threshold
-    };
+// Protection parameters
+// ! These parameters are shared among all test cases
+ProtectionOverloadParams protectionParams = {
+    .overload_threshold = 1.0f,     // ! Normalized to 1.0 (current passed in the test is actually I/Ithreshold)
+    .k_factor = 1.0f,               // IEC 60947-2 protection k
+    .cooling_rate = 0.98f,          
+    .max_energy = 1.0f              // 1.0 is the trip threshold
+};
 
-    // Calls all the test cases
-    for (unsigned int i = 0; i < sizeof(test_cases) / sizeof(test_cases[0]); i++) {
-        printf("Running test case %d: %s\n", test_cases[i].test_id, test_cases[i].description);
-        test_ProtectionOverload_Generic(i+1, 
-            &protectionParams, 
-            test_cases[i].simulated_current, 
-            test_cases[i].expected_state, 
-            test_cases[i].expected_time);
-    }
-}
+struct {
+    unsigned int id;
+    float current;
+    ProtectionOverloadState expected_state;
+    float expected_time;
+    const char* description;
+} test_cases_fixed_current[] = {
+    {.id = 100, .current = 0.2f, .expected_state = ST_IDLE, .description = "Low current"},
+    {.id = 101, .current = 0.8f, .expected_state = ST_IDLE, .description = "Normal current"},
+    {.id = 102, .current = 1.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .description = "Nominal current"},
+    {.id = 103, .current = 1.2f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 2.27f, .description = "Overload current 1,2 x Itrip"},
+    {.id = 104, .current = 1.4f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 13.04f, .description = "Overload current 1,4 x Itrip"},
+    {.id = 105, .current = 1.6f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.64f, .description = "Overload current 1,6 x Itrip"},
+    {.id = 106, .current = 2.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.33f, .description = "Overload current 2,0 x Itrip"},
+    {.id = 107, .current = 3.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.12f, .description = "Overload current 3,0 x Itrip"}
+ };
 
+void test_case_launch(unsigned int test_id) {
+    printf("Running test case %d: %s\n", test_cases_fixed_current[test_id].id, test_cases_fixed_current[test_id].description);
+    test_ProtectionOverload_Generic(&protectionParams, test_cases_fixed_current[test_id].current, test_cases_fixed_current[test_id].expected_state, test_cases_fixed_current[test_id].expected_time);
+}   
+
+void test_fixed_current_0(void) {test_case_launch(0);}
+void test_fixed_current_1(void) {test_case_launch(1);}
+void test_fixed_current_2(void) {test_case_launch(2);}
+void test_fixed_current_3(void) {test_case_launch(3);}
+void test_fixed_current_4(void) {test_case_launch(4);}
+void test_fixed_current_5(void) {test_case_launch(5);}
+void test_fixed_current_6(void) {test_case_launch(6);}
+void test_fixed_current_7(void) {test_case_launch(7);}
+
+/* ------------------------------------------------ 
+        Main Function
+   ------------------------------------------------ */  
 
 int main() {
 
-#ifdef USE_UNITY
-
     UNITY_BEGIN();
-    RUN_TEST(test_ProtectionOverload_Parameterized);
+
+    // Test cases with fixed current values
+    printf("\n--------------------------\n");
+    printf("Protection Overload Test with fixed currents\n\n");
+    RUN_TEST(test_fixed_current_0);
+    RUN_TEST(test_fixed_current_1);
+    RUN_TEST(test_fixed_current_2);
+    RUN_TEST(test_fixed_current_3);
+    RUN_TEST(test_fixed_current_4);
+    RUN_TEST(test_fixed_current_5);
+    RUN_TEST(test_fixed_current_6);
+    RUN_TEST(test_fixed_current_7);
+
     return UNITY_END();    
-
-#else  // USE_UNITY        
-    printf("Starting Protection Overload Test\n");
-
-    ProtectionOverloadParams protectionParams = {
-        .overload_threshold = 1.0f,     // Normalized to 1.0 (current passed in the test is actually I/Ithreshold)
-        .k_factor = 1.0f,               // IEC 60947 protection k
-        .cooling_rate = 0.98f,          
-        .max_energy = 1.0f              // 1.0 is the trip threshold
-    };
-
-    // Test cases
-    test_ProtectionOverload_Generic(&protectionParams, 1.0f, ST_IDLE, 0.0f);
-    test_ProtectionOverload_Generic(&protectionParams, 1.2f, ST_OVERLOAD_TRIGGERED, 2.27f);
-    test_ProtectionOverload_Generic(&protectionParams, 1.4f, ST_OVERLOAD_TRIGGERED, 1.04f);
-    test_ProtectionOverload_Generic(&protectionParams, 0.2f, ST_IDLE, 0.0f);
-    return 0;
-
-#endif
 
 }
