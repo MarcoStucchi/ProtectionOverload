@@ -4,15 +4,23 @@
 #include <assert.h>
 #include "protection_overload.h"
 
-#define USE_UNITY
-
 #define TEST_MAX_TIME   3600.0  // [s] max time for test execution (default = 1 hour)
+
+typedef struct {
+    unsigned int id;
+    float current;
+    ProtectionOverloadState expected_state;
+    float expected_time;
+    const char* description;
+} t_test_case;
 
 float mock_sensor_values[] = {3.0, 3.0, 3.0, 3.0, 3.0};
 int mock_index = 0;
 
 // Test current value (mocked sensor value)
 float test_current = 0.0f;
+
+
 
 /* ------------------------------------------------ 
         Unity setup and teardown functions
@@ -97,13 +105,7 @@ ProtectionOverloadParams protectionParams = {
     .max_energy = 1.0f              // 1.0 is the trip threshold
 };
 
-struct {
-    unsigned int id;
-    float current;
-    ProtectionOverloadState expected_state;
-    float expected_time;
-    const char* description;
-} test_cases_fixed_current[] = {
+t_test_case test_cases_fixed_current[] = {
     {.id = 100, .current = 0.2f, .expected_state = ST_IDLE, .description = "Low current"},
     {.id = 101, .current = 0.8f, .expected_state = ST_IDLE, .description = "Normal current"},
     {.id = 102, .current = 1.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .description = "Nominal current"},
