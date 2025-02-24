@@ -1,6 +1,6 @@
 ﻿# Documentation
 :dart: Target of this project is to learn about **Test** and **Test Automation** in embedded world. 
-The application is a Ciruit Breaker protection as per standard IEC 60947-2.
+The application is a Circuit Breaker Overload Protection as per standard IEC 60947-2.
 
 ## Main features
 - **Windows** and **ARM** GCC toolchains used for tests
