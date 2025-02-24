@@ -121,14 +121,14 @@ void test_case_launch(unsigned int test_id) {
     test_ProtectionOverload_Generic(&protectionParams, test_cases_fixed_current[test_id].current, test_cases_fixed_current[test_id].expected_state, test_cases_fixed_current[test_id].expected_time);
 }   
 
-void test_fixed_current_0(void) {test_case_launch(0);}
-void test_fixed_current_1(void) {test_case_launch(1);}
-void test_fixed_current_2(void) {test_case_launch(2);}
-void test_fixed_current_3(void) {test_case_launch(3);}
-void test_fixed_current_4(void) {test_case_launch(4);}
-void test_fixed_current_5(void) {test_case_launch(5);}
-void test_fixed_current_6(void) {test_case_launch(6);}
-void test_fixed_current_7(void) {test_case_launch(7);}
+void test_fixed_current_100(void) {test_case_launch(0);}
+void test_fixed_current_101(void) {test_case_launch(1);}
+void test_fixed_current_102(void) {test_case_launch(2);}
+void test_fixed_current_103(void) {test_case_launch(3);}
+void test_fixed_current_104(void) {test_case_launch(4);}
+void test_fixed_current_105(void) {test_case_launch(5);}
+void test_fixed_current_106(void) {test_case_launch(6);}
+void test_fixed_current_107(void) {test_case_launch(7);}
 
 /* ------------------------------------------------ 
         Main Function
@@ -141,14 +141,14 @@ int main() {
     // Test cases with fixed current values
     printf("\n--------------------------\n");
     printf("Protection Overload Test with fixed currents\n\n");
-    RUN_TEST(test_fixed_current_0);
-    RUN_TEST(test_fixed_current_1);
-    RUN_TEST(test_fixed_current_2);
-    RUN_TEST(test_fixed_current_3);
-    RUN_TEST(test_fixed_current_4);
-    RUN_TEST(test_fixed_current_5);
-    RUN_TEST(test_fixed_current_6);
-    RUN_TEST(test_fixed_current_7);
+    RUN_TEST(test_fixed_current_100);
+    RUN_TEST(test_fixed_current_101);
+    RUN_TEST(test_fixed_current_102);
+    RUN_TEST(test_fixed_current_103);
+    RUN_TEST(test_fixed_current_104);
+    RUN_TEST(test_fixed_current_105);
+    RUN_TEST(test_fixed_current_106);
+    RUN_TEST(test_fixed_current_107);
 
     return UNITY_END();    
 
