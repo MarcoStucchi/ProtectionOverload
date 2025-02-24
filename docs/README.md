@@ -1,9 +1,10 @@
 ﻿# Documentation
-This project introduces **Test** and **Test Automation** in an embedded protection, for learning purposes on testing landscape.
+:dart: Target of this project is to learn about **Test** and **Test Automation** in embedded world. 
+The application is a Ciruit Breaker protection as per standard IEC 60947-2.
 
 ## Main features
 - **Windows** and **ARM** GCC toolchains used for tests
-- Test suite: **Unity**
+- Test suite: **Unity** 🚀
 - ARM emulation with **QEMU**
 
 # Toolchain
