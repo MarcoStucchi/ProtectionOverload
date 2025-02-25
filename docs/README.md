@@ -14,10 +14,12 @@ Basic development process uses specific IDEs and compiler to generate an executa
 ![image](https://github.com/user-attachments/assets/61693346-283c-4f31-ab6a-b950c5782a5c)
 
 ### Test Process
-On the other hand, testing process is typically based on a sepataed toolchain, and uses dedicated test files able to test a dedicated set of source files in an isolated environment, that is not necessarily the target environment. Typically the environment is the your desktop PC, or a cloud machine and the toolchain includes GCC.
+On the other hand, testing process is typically based on a sepataed toolchain, and uses dedicated test files able to test a dedicated set of source files in an isolated environment, that is not necessarily the target environment. Typically the environment is a Host PC - your laptop or a cloud machine - and the toolchain includes GCC.
 
 ![image](https://github.com/user-attachments/assets/150ecabb-f542-4af1-9e36-275778fe1ce0)
 
+### Multiple Test Environments
+Multiple test environments can be put in place. This project will include testing on Windows and testing on a emulated ARM environment. 
 
 # Links
 WinLibs standalone build of GCC and MinGW-w64 for Windows - https://winlibs.com/
