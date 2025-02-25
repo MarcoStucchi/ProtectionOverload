@@ -8,11 +8,11 @@ The application is a Circuit Breaker Overload Protection as per standard IEC 609
 - ARM emulation with **QEMU**
 
 ## Basic process
-Basic development process uses specific IDEs and compiler to generate an executable file for the target platform. 
+Basic development process uses specific IDEs and compiler to generate an executable file for the target platform (e.g. Keil MDK and ARM LLVM C compiler).
 
 ![image](https://github.com/user-attachments/assets/61693346-283c-4f31-ab6a-b950c5782a5c)
 
-On the other hand, testing process is typically based on a sepataed toolchain, and focus on a dedicated set of source files to be tested in an environment that is not necessarily the target environment. Typically the environment is the your desktop PC, or a cloud machine.
+On the other hand, testing process is typically based on a sepataed toolchain, and uses dedicated test files able to test a dedicated set of source files in an isolated environment, that is not necessarily the target environment. Typically the environment is the your desktop PC, or a cloud machine and the toolchain includes GCC.
 
 ![image](https://github.com/user-attachments/assets/150ecabb-f542-4af1-9e36-275778fe1ce0)
 
