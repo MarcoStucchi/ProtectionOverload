@@ -13,6 +13,6 @@ Regardless of the adopted toolchain in production, GCC is used for testing. This
 # Links
 WinLibs standalone build of GCC and MinGW-w64 for Windows - https://winlibs.com/
 
-Arm GNU Toolchain Downloads - https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+Arm GNU Toolchain Downloads - [https://developer.arm.com/](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 
-Unity Assertion Reference - docs/UnityAssertionsReference.md
+Unity Assertion Reference - [docs/UnityAssertionsReference.md](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
