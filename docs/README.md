@@ -8,7 +8,6 @@ The application is a Circuit Breaker Overload Protection as per standard IEC 609
 - ARM emulation with **QEMU**
 
 ## Testing process 
-
 ### Development process
 Basic development process uses specific IDEs and compiler to generate an executable file for the target platform (e.g. Keil MDK and ARM LLVM C compiler).
 
