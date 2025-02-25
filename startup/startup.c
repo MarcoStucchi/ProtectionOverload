@@ -1,22 +1,20 @@
 #include <stdint.h>
 
-// Define the stack (allocated in RAM)
-#define STACK_SIZE  1024
-static uint8_t stack[STACK_SIZE] __attribute__((aligned(8), used, section(".stack")));
+/* Linker script symbols */
+extern uint32_t _stack_top;
+extern void Reset_Handler(void);
 
-// Forward declaration of the Reset Handler
-void Reset_Handler(void);
+/* Weak definitions for system handlers */
+void Default_Handler(void) { while (1); }
+void NMI_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void HardFault_Handler(void) __attribute__((weak, alias("Default_Handler")));
 
-// Minimal vector table (SP + Reset Handler)
-__attribute__((section(".isr_vector"), used))
-void (* const vector_table[])(void) = {
-    (void (*)(void))(&stack[STACK_SIZE]),  // Stack pointer (top of stack)
-    Reset_Handler                          // Reset Handler
+/* Vector Table */
+__attribute__((section(".isr_vector")))
+uint32_t *vector_table[] = {
+    (uint32_t *)&_stack_top,  /* Stack pointer */
+    (uint32_t *)Reset_Handler, /* Reset handler */
+    (uint32_t *)NMI_Handler,   /* NMI */
+    (uint32_t *)HardFault_Handler, /* HardFault */
+    /* Add more handlers as needed */
 };
-
-// Dummy Reset Handler (calls `main`)
-void Reset_Handler(void) {
-    extern int main(void);
-    main();
-    while (1);  // Stay here if `main` returns
-}
