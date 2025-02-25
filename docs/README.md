@@ -27,3 +27,5 @@ WinLibs standalone build of GCC and MinGW-w64 for Windows - https://winlibs.com/
 Arm GNU Toolchain Downloads - [https://developer.arm.com/](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 
 Unity Assertion Reference - [docs/UnityAssertionsReference.md](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
+
+QEMU -  https://www.qemu.org/
