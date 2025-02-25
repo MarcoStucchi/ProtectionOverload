@@ -3,12 +3,19 @@
 The application is a Circuit Breaker Overload Protection as per standard IEC 60947-2.
 
 ## Main features
-- **Windows** and **ARM** GCC toolchains used for tests
+- **Windows** and **ARM** GCC toolchains used for tests (regardless of production toolchain)
 - Test suite: **Unity** 🚀
 - ARM emulation with **QEMU**
 
-# Toolchain
-Regardless of the adopted toolchain in production, GCC is used for testing. This could introduce some differencies bewteen product environment and testing phase.  
+## Basic process
+Basic development process uses specific IDEs and compiler to generate an executable file for the target platform. 
+
+![image](https://github.com/user-attachments/assets/61693346-283c-4f31-ab6a-b950c5782a5c)
+
+On the other hand, testing process is typically based on a sepataed toolchain, and focus on a dedicated set of source files to be tested in an environment that is not necessarily the target environment. Typically the environment is the your desktop PC, or a cloud machine.
+
+![image](https://github.com/user-attachments/assets/150ecabb-f542-4af1-9e36-275778fe1ce0)
+
 
 # Links
 WinLibs standalone build of GCC and MinGW-w64 for Windows - https://winlibs.com/
