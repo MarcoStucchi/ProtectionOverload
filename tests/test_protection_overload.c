@@ -105,7 +105,7 @@ ProtectionOverloadParams protectionParams = {
     .max_energy = 1.0f              // 1.0 is the trip threshold
 };
 
-t_test_case test_cases_fixed_current[] = {
+const t_test_case test_cases_fixed_current[] = {
     {.id = 100, .current = 0.2f, .expected_state = ST_IDLE, .description = "Low current"},
     {.id = 101, .current = 0.8f, .expected_state = ST_IDLE, .description = "Normal current"},
     {.id = 102, .current = 1.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .description = "Nominal current"},
