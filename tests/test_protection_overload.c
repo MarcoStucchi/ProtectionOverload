@@ -108,9 +108,9 @@ ProtectionOverloadParams protectionParams = {
 const t_test_case test_cases_fixed_current[] = {
     {.id = 100, .current = 0.2f, .expected_state = ST_IDLE, .description = "Low current"},
     {.id = 101, .current = 0.8f, .expected_state = ST_IDLE, .description = "Normal current"},
-    {.id = 102, .current = 1.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .description = "Nominal current"},
+    {.id = 102, .current = 1.0f, .expected_state = ST_IDLE, .description = "Nominal current"},
     {.id = 103, .current = 1.2f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 2.27f, .description = "Overload current 1,2 x Itrip"},
-    {.id = 104, .current = 1.4f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 13.04f, .description = "Overload current 1,4 x Itrip"},
+    {.id = 104, .current = 1.4f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.04f, .description = "Overload current 1,4 x Itrip"},
     {.id = 105, .current = 1.6f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.64f, .description = "Overload current 1,6 x Itrip"},
     {.id = 106, .current = 2.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.33f, .description = "Overload current 2,0 x Itrip"},
     {.id = 107, .current = 3.0f, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.12f, .description = "Overload current 3,0 x Itrip"}
