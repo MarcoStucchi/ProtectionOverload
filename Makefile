@@ -78,7 +78,7 @@ test_all: test_arm test_win
 
 # Clean build directory
 clean:
-	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.elf $(BUILD_DIR)/*.exe $(BUILD_DIR)/*.txt
+	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.elf $(BUILD_DIR)/*.exe $(BUILD_DIR)/*.txt $(BUILD_DIR)/*.map
 
 # ARM Build (now includes mock sensor)
 $(OUT_ARM): $(SRCS) $(TEST_SRCS) $(MOCK_SRCS) $(STUBS) $(UNITY_SRC) $(STARTUP_SRCS)
