@@ -14,10 +14,11 @@ SECTIONS
 {
     .isr_vector :
     {
+        __vector_table = .;
         . = ALIGN(4);
         KEEP(*(.isr_vector))
         . = ALIGN(4);
-    } > FLASH
+    } > FLASH AT > FLASH
 
     .text :
     {
