@@ -31,7 +31,9 @@ OUT_WIN = $(BUILD_DIR)/test_protection_overload_win.exe
 
 # Compiler Flags
 CFLAGS = -I$(SRC_DIR) -I$(TESTS_DIR) -Wall -Wextra -std=c11
-LDFLAGS_ARM = -T $(STARTUP_DIR)/linker.ld -nostartfiles -lm --specs=nosys.specs
+CFLAGS += -g
+CFLAGS_ARM = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -march=armv7-m
+LDFLAGS_ARM = -T $(STARTUP_DIR)/linker.ld -nostartfiles -lm --specs=nosys.specs -Wl,-Map=$(BUILD_DIR)/test_protection_overload_arm.map
 LDFLAGS_WIN = -lm  # No special specs needed for Windows
 
 # GDB Commands file
@@ -82,7 +84,7 @@ clean:
 
 # ARM Build (now includes mock sensor)
 $(OUT_ARM): $(SRCS) $(TEST_SRCS) $(MOCK_SRCS) $(STUBS) $(UNITY_SRC) $(STARTUP_SRCS)
-	$(CC_ARM) $(CFLAGS) -I $(UNITY_DIR) -o $@ $^ $(LDFLAGS_ARM)
+	$(CC_ARM) $(CFLAGS) $(CFLAGS_ARM) -I $(UNITY_DIR) -o $@ $^ $(LDFLAGS_ARM)
 
 # Windows Build (including mock sensor but excluding stubs)
 $(OUT_WIN): $(SRCS) $(TEST_SRCS) $(MOCK_SRCS) $(UNITY_SRC)
