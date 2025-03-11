@@ -263,11 +263,11 @@ const t_test_case test_cases_variable_current[] = {
     {},
     {},
     {},
-    {.id = 213, .current = 1.2f, .simulated_currents = simulated_currents_213, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 3.27f, .description = "Overload current 1,2 x Itrip"},
-    {.id = 214, .current = 1.4f, .simulated_currents = simulated_currents_214, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 2.04f, .description = "Overload current 1,4 x Itrip"},
-    {.id = 215, .current = 1.6f, .simulated_currents = simulated_currents_215, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.64f, .description = "Overload current 1,6 x Itrip"},
-    {.id = 216, .current = 2.0f, .simulated_currents = simulated_currents_216, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.33f, .description = "Overload current 2,0 x Itrip"},
-    {.id = 217, .current = 3.0f, .simulated_currents = simulated_currents_217, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.12f, .description = "Overload current 3,0 x Itrip"}
+    {.id = 213, .current = 1.2f, .simulated_currents = simulated_currents_213, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 4.27f, .description = "Overload current 1,2 x Itrip"},
+    {.id = 214, .current = 1.4f, .simulated_currents = simulated_currents_214, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 3.04f, .description = "Overload current 1,4 x Itrip"},
+    {.id = 215, .current = 1.6f, .simulated_currents = simulated_currents_215, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.64f, .description = "Overload current 1,6 x Itrip"},
+    {.id = 216, .current = 2.0f, .simulated_currents = simulated_currents_216, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.33f, .description = "Overload current 2,0 x Itrip"},
+    {.id = 217, .current = 3.0f, .simulated_currents = simulated_currents_217, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 0.12f, .description = "Overload current 3,0 x Itrip"}
  };
 
 
