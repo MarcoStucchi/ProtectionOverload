@@ -253,8 +253,8 @@ int main() {
     UNITY_BEGIN();
 
     // Test cases with fixed current values
-    printf("\n--------------------------\n");
-    printf("Protection Overload Test with fixed currents\n\n");
+    // printf("\n--------------------------\n");
+    printf("\nProtection Overload Test with fixed currents\n");
     RUN_TEST(test_fixed_current_100);
     RUN_TEST(test_fixed_current_101);
     RUN_TEST(test_fixed_current_102);
@@ -266,8 +266,8 @@ int main() {
 
 
     // Test cases with variable current values
-    printf("\n--------------------------\n");
-    printf("Protection Overload Test with variable currents\n\n");
+    // printf("\n--------------------------\n");
+    printf("\nProtection Overload Test with variable currents\n");
     RUN_TEST(test_variable_current_200);
     RUN_TEST(test_variable_current_201);
     RUN_TEST(test_variable_current_202);
