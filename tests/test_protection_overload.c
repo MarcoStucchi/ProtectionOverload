@@ -51,7 +51,7 @@ float Sensor_Read() {
     return test_current;
 }
 
-float Sensor_Read_Mock(t_simulated_current_element *simulated_currents, float time) {
+float Sensor_Read_Mock(const t_simulated_current_element *simulated_currents, float time) {
     
     float current = 0.0f;
     
