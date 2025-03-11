@@ -214,6 +214,41 @@ const t_simulated_current_element simulated_currents_207[] = {
 };
 
 
+const t_simulated_current_element simulated_currents_213[] = {
+    {.time = 0.0f, .current = 1.2f},
+    {.time = 1.0f, .current = 0.0f},
+    {.time = 2.0f, .current = 1.2f},
+    {.time = END_SIMULATION, .current = 0.0f}
+};
+
+const t_simulated_current_element simulated_currents_214[] = {
+    {.time = 0.0f, .current = 1.4f},
+    {.time = 1.0f, .current = 0.0f},
+    {.time = 2.0f, .current = 1.4f},
+    {.time = END_SIMULATION, .current = 0.0f}
+};
+
+const t_simulated_current_element simulated_currents_215[] = {
+    {.time = 0.0f, .current = 1.6f},
+    {.time = 1.0f, .current = 0.0f},
+    {.time = 2.0f, .current = 1.6f},
+    {.time = END_SIMULATION, .current = 0.0f}
+};
+
+const t_simulated_current_element simulated_currents_216[] = {
+    {.time = 0.0f, .current = 2.0f},
+    {.time = 1.0f, .current = 0.0f},
+    {.time = 2.0f, .current = 2.0f},
+    {.time = END_SIMULATION, .current = 0.0f}
+};
+
+const t_simulated_current_element simulated_currents_217[] = {
+    {.time = 0.0f, .current = 3.0f},
+    {.time = 1.0f, .current = 0.0f},
+    {.time = 2.0f, .current = 3.0f},
+    {.time = END_SIMULATION, .current = 0.0f}
+};
+
 const t_test_case test_cases_variable_current[] = {
     {.id = 200, .current = 0.2f, .simulated_currents = simulated_currents_200, .expected_state = ST_IDLE, .description = "Low current"},
     {.id = 201, .current = 0.8f, .simulated_currents = simulated_currents_201, .expected_state = ST_IDLE, .description = "Normal current"},
@@ -222,7 +257,17 @@ const t_test_case test_cases_variable_current[] = {
     {.id = 204, .current = 1.4f, .simulated_currents = simulated_currents_204, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 2.04f, .description = "Overload current 1,4 x Itrip"},
     {.id = 205, .current = 1.6f, .simulated_currents = simulated_currents_205, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.64f, .description = "Overload current 1,6 x Itrip"},
     {.id = 206, .current = 2.0f, .simulated_currents = simulated_currents_206, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.33f, .description = "Overload current 2,0 x Itrip"},
-    {.id = 207, .current = 3.0f, .simulated_currents = simulated_currents_207, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.12f, .description = "Overload current 3,0 x Itrip"}
+    {.id = 207, .current = 3.0f, .simulated_currents = simulated_currents_207, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.12f, .description = "Overload current 3,0 x Itrip"},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {.id = 213, .current = 1.2f, .simulated_currents = simulated_currents_213, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 3.27f, .description = "Overload current 1,2 x Itrip"},
+    {.id = 214, .current = 1.4f, .simulated_currents = simulated_currents_214, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 2.04f, .description = "Overload current 1,4 x Itrip"},
+    {.id = 215, .current = 1.6f, .simulated_currents = simulated_currents_215, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.64f, .description = "Overload current 1,6 x Itrip"},
+    {.id = 216, .current = 2.0f, .simulated_currents = simulated_currents_216, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.33f, .description = "Overload current 2,0 x Itrip"},
+    {.id = 217, .current = 3.0f, .simulated_currents = simulated_currents_217, .expected_state = ST_OVERLOAD_TRIGGERED, .expected_time = 1.12f, .description = "Overload current 3,0 x Itrip"}
  };
 
 
@@ -243,6 +288,12 @@ void test_variable_current_204(void) {test_case_launch(&test_cases_variable_curr
 void test_variable_current_205(void) {test_case_launch(&test_cases_variable_current[5]);}
 void test_variable_current_206(void) {test_case_launch(&test_cases_variable_current[6]);}
 void test_variable_current_207(void) {test_case_launch(&test_cases_variable_current[7]);}
+
+void test_variable_current_213(void) {test_case_launch(&test_cases_variable_current[13]);}
+void test_variable_current_214(void) {test_case_launch(&test_cases_variable_current[14]);}
+void test_variable_current_215(void) {test_case_launch(&test_cases_variable_current[15]);}
+void test_variable_current_216(void) {test_case_launch(&test_cases_variable_current[16]);}
+void test_variable_current_217(void) {test_case_launch(&test_cases_variable_current[17]);}
 
 /* ------------------------------------------------ 
         Main Function
@@ -274,6 +325,14 @@ int main() {
     RUN_TEST(test_variable_current_205);
     RUN_TEST(test_variable_current_206);
     RUN_TEST(test_variable_current_207);
+
+    // Test cases with variable current values
+    printf("\nProtection Overload Test with currents removal (1s on-1s off)\n");
+    RUN_TEST(test_variable_current_213);
+    RUN_TEST(test_variable_current_214);
+    RUN_TEST(test_variable_current_215);
+    RUN_TEST(test_variable_current_216);
+    RUN_TEST(test_variable_current_217);
 
     return UNITY_END();    
 
