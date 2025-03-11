@@ -265,7 +265,7 @@ int main() {
 
 
     // Test cases with variable current values
-    printf("\nProtection Overload Test with variable currents\n");
+    printf("\nProtection Overload Test with variable currents (1s delay)\n");
     RUN_TEST(test_variable_current_200);
     RUN_TEST(test_variable_current_201);
     RUN_TEST(test_variable_current_202);
