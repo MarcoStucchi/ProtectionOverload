@@ -5,7 +5,10 @@ CC_WIN = gcc
 # Emulation
 QEMU = qemu-system-arm
 QEMU_MACHINE = lm3s6965evb
-QEMU_FLAGS = -semihosting -nographic
+# QEMU_FLAGS = -semihosting -nographic
+# QEMU_FLAGS = -semihosting-config enable=on,target=native -nographic -d in_asm,guest_errors
+# QEMU_FLAGS = -semihosting-config enable=on,target=native -nographic -serial mon:stdio -d in_asm,guest_errors
+QEMU_FLAGS = -semihosting-config enable=on,target=auto -nographic -serial mon:stdio -d in_asm,guest_errors -D qemu.log
 
 # GDB
 GDB = arm-none-eabi-gdb
@@ -32,7 +35,7 @@ OUT_WIN = $(BUILD_DIR)/test_protection_overload_win.exe
 # Compiler Flags
 CFLAGS = -I$(SRC_DIR) -I$(TESTS_DIR) -Wall -Wextra -std=c11
 CFLAGS += -g
-CFLAGS_ARM = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -march=armv7-m
+CFLAGS_ARM = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -march=armv7-m -specs=rdimon.specs -lc -lrdimon
 LDFLAGS_ARM = -T $(STARTUP_DIR)/linker.ld -nostartfiles -lm --specs=nosys.specs -Wl,-Map=$(BUILD_DIR)/test_protection_overload_arm.map
 LDFLAGS_WIN = -lm  # No special specs needed for Windows
 
@@ -70,6 +73,10 @@ $(GDB_CMD_FILE): $(BUILD_DIR)
 	@echo "target remote localhost:1234" > $@
 	@echo "monitor system_reset" >> $@
 	@echo "break main" >> $@
+	@echo "break _puts_r " >> $@
+	@echo "break __sfvwrite_r" >> $@
+	@echo "break _write" >> $@
+	@echo "break strlen" >> $@
 	@echo "continue" >> $@
 
 # Build both versions (ARM & Windows)
