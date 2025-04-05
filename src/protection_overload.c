@@ -42,7 +42,10 @@ float ProtectionOverload_SM_GetCallRate(void) {
 // Run state machine (called periodically)
 void ProtectionOverload_SM_Run() {
     // Get time step in seconds
-    float call_rate_sec = ProtectionOverload_SM_GetCallRate();  
+    float call_rate_sec = ProtectionOverload_SM_GetCallRate();
+    #if DEBUG_ACCUMULATED_ENERGY  
+    static bool accumulating = false;
+    #endif
 
     // Protection State Machine
     switch (sm.state) {
@@ -52,6 +55,9 @@ void ProtectionOverload_SM_Run() {
             if (sm.entry) {
                 // Reset entry flag
                 sm.entry = false;
+                #if DEBUG_ACCUMULATED_ENERGY
+                accumulating = false;
+                #endif
             }
 
             // Read current sensor value
@@ -61,6 +67,15 @@ void ProtectionOverload_SM_Run() {
             float overload_factor = maxCurrent / sm.params.overload_threshold;
 
             if (overload_factor > 1.15f) {
+                #if DEBUG_ACCUMULATED_ENERGY
+                if (!accumulating)
+                {
+                    // print accumulated energy
+                    printf("Start accumulating: Accumulated energy: %f\n", sm.accumulated_energy);
+                }
+                accumulating = true;
+                #endif
+
                 // Compute inverse-time trip curve: t_trip = k / ((I/I_trip)^n - 1)
                 float trip_time_sec = sm.params.k_factor / (powf(overload_factor, 2)-1);
 
@@ -76,6 +91,14 @@ void ProtectionOverload_SM_Run() {
                 // If current drops below threshold, slowly reset energy (hysteresis)
                 sm.accumulated_energy -= call_rate_sec / sm.params.max_energy;
                 if (sm.accumulated_energy < 0.0f) sm.accumulated_energy = 0.0f;
+                #if DEBUG_ACCUMULATED_ENERGY
+                if (accumulating)
+                {
+                    // print accumulated energy
+                    printf("Start discharge: Accumulated energy: %f\n", sm.accumulated_energy);
+                }
+                accumulating = false;
+                #endif
             }
             break;
         }
