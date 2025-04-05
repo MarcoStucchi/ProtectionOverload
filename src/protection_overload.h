@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// ! Test with lower tolerance
 #define protectionTolerance 0.1f        // 10% tolerance for protection trip time (used in tests)
+//#define protectionTolerance 0.01f     // 1% tolerance for protection trip time (used in tests)
 
 // State Machine States
 typedef enum {
