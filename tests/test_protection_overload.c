@@ -216,8 +216,8 @@ const t_simulated_current_element simulated_currents_207[] = {
 
 const t_simulated_current_element simulated_currents_213[] = {
     {.time = 0.0f, .current = 1.2f},
-    {.time = 1.0f, .current = 0.0f},
-    {.time = 2.0f, .current = 1.2f},
+    {.time = 2.0f, .current = 0.0f},
+    {.time = 2.5f, .current = 1.2f},
     {.time = END_SIMULATION, .current = 0.0f}
 };
 
